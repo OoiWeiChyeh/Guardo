@@ -148,7 +148,7 @@ export default function StudentDashboard() {
                             <span className="text-yellow" style={{ fontSize: 12, fontWeight: 700 }}>{user?.xp || 340} XP</span>
                         </div>
                         <div className="xp-bar-wrap" style={{ margin: '6px 0 0' }}><div className="xp-bar-fill" style={{ width: `${xpPct}%` }} /></div>
-                        <span className="text-muted" style={{ fontSize: 11 }}}>{200 - (user?.xp % 200)} XP to Level {(user?.level || 5) + 1}</span>
+                        <span className="text-muted" style={{ fontSize: 11 }}>{200 - (user?.xp % 200)} XP to Level {(user?.level || 5) + 1}</span>
             </div>
 
             {/* Quick Tips */}
