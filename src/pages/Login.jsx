@@ -19,12 +19,7 @@ export default function Login() {
         setLoading(true);
         try {
             await new Promise(r => setTimeout(r, 700)); // simulate network
-            const user = login(email, password);
-            if (user.role !== tab) {
-                setError(`This account belongs to a ${user.role}. Please use the correct tab.`);
-                setLoading(false);
-                return;
-            }
+            const user = login(email, password, tab);
             navigate(user.role === 'teacher' ? '/teacher' : '/student');
         } catch (err) {
             setError(err.message);
@@ -33,8 +28,16 @@ export default function Login() {
     };
 
     const fillDemo = () => {
-        setEmail(tab === 'student' ? 'student@guardo.ai' : 'teacher@guardo.ai');
-        setPassword(tab === 'student' ? 'student123' : 'teacher123');
+        if (tab === 'student') {
+            setEmail('student@guardo.ai');
+            setPassword('student123');
+        } else if (tab === 'teacher') {
+            setEmail('teacher@guardo.ai');
+            setPassword('teacher123');
+        } else {
+            setEmail('admin@guardo.ai');
+            setPassword('admin123');
+        }
     };
 
     return (

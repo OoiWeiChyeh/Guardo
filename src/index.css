@@ -37,6 +37,34 @@ body {
   overflow-x: hidden;
 }
 
+/* ── Accessibility / Preferences (Settings) ── */
+body.pref-large-text { font-size: 18px; }
+
+body.pref-dyslexia-font {
+  font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Arial, "Noto Sans", "Liberation Sans", sans-serif;
+  letter-spacing: 0.02em;
+}
+
+body.pref-high-contrast {
+  --black: #000;
+  --surface: #060606;
+  --surface2: #0e0e0e;
+  --text: #ffffff;
+  --muted: #e5e5e5;
+  --orange: #ff7a1a;
+  --orange2: #ff9b3d;
+  --gold: #ffd166;
+  --yellow: #ffe28a;
+}
+
+body.pref-reduce-motion *,
+body.pref-reduce-motion *::before,
+body.pref-reduce-motion *::after {
+  animation: none !important;
+  transition: none !important;
+  scroll-behavior: auto !important;
+}
+
 /* ── Scrollbar ── */
 ::-webkit-scrollbar { width: 6px; }
 ::-webkit-scrollbar-track { background: var(--surface); }
@@ -64,7 +92,7 @@ body {
   border-radius: var(--radius-sm);
   border: none;
   cursor: pointer;
-  font-family: 'Inter', sans-serif;
+  font-family: inherit;
   font-weight: 600;
   font-size: 15px;
   transition: all var(--transition);
@@ -109,7 +137,7 @@ body {
   border: 1px solid rgba(212,160,23,0.25);
   border-radius: var(--radius-sm);
   color: var(--text);
-  font-family: 'Inter', sans-serif;
+  font-family: inherit;
   font-size: 15px;
   outline: none;
   transition: border-color var(--transition), box-shadow var(--transition);

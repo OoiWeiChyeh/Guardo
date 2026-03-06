@@ -269,6 +269,17 @@
 
 .chat-send {
     flex-shrink: 0;
+    transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+.chat-send:hover:not(:disabled) {
+    transform: translateY(-1px);
+    box-shadow: var(--glow-orange);
+}
+
+.chat-send:active:not(:disabled) {
+    transform: translateY(0);
+    box-shadow: none;
 }
 
 /* Quiz */
@@ -332,13 +343,15 @@
     font-size: 14px;
     font-weight: 500;
     cursor: pointer;
-    transition: all 0.2s;
+    transition: transform 0.16s ease, background 0.2s ease, border-color 0.2s ease, box-shadow 0.16s ease;
     text-align: left;
 }
 
 .scenario-opt:hover:not(:disabled) {
     background: rgba(232, 93, 4, 0.12);
     border-color: var(--orange);
+    transform: translateY(-1px);
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.4);
 }
 
 .opt-correct {
