@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
-import './Signup.css';
+import '../styles/Signup.css';
 
 export default function Signup() {
   const { register } = useAuth();

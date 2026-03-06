@@ -1,7 +1,7 @@
 import { useMemo } from 'react';
 import Navbar from '../components/Navbar';
 import { usePreferences } from '../context/PreferencesContext.jsx';
-import './Settings.css';
+import '../styles/Settings.css';
 
 function ToggleRow({ title, desc, checked, onChange }) {
   return (
