@@ -128,13 +128,13 @@ export function AuthProvider({ children }) {
 
     const approverRole =
       payload.role === 'student' ? 'teacher' :
-      payload.role === 'teacher' ? 'admin' :
-      null;
+        payload.role === 'teacher' ? 'admin' :
+          null;
 
     const avatarFallback =
       payload.role === 'student' ? '🦁' :
-      payload.role === 'teacher' ? '🦉' :
-      '👤';
+        payload.role === 'teacher' ? '🦉' :
+          '👤';
 
     const record = {
       email: emailLower,
@@ -153,7 +153,7 @@ export function AuthProvider({ children }) {
 
     setCustomUsers((prev) => ({
       ...prev,
-      [emailLower] = record,
+      [emailLower]: record,
     }));
 
     return record;
