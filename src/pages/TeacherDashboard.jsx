@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import Navbar from '../components/Navbar';
-import './TeacherDashboard.css';
+import '../styles/TeacherDashboard.css';
 
 const STUDENTS = [
     { id: 1, name: 'Alex Johnson', avatar: '🦁', grade: 'Yr4', xp: 340, level: 5, modules: 3, quizScore: 80, status: 'on-track', lastSeen: '2h ago' },
@@ -45,7 +45,7 @@ export default function TeacherDashboard() {
             <div className="td-body">
 
                 {/* Header banner */}
-                <div className="td-banner">
+                <div className="td-banner animate-fade-up-1">
                     <div>
                         <h1 className="td-heading">Class 4B Overview</h1>
                         <p className="td-sub">Monitor student safety awareness progress and AI interaction data</p>
@@ -59,7 +59,7 @@ export default function TeacherDashboard() {
                 </div>
 
                 {/* Tabs */}
-                <div className="td-tabs">
+                <div className="td-tabs animate-fade-up-2">
                     {['overview', 'alerts', 'modules'].map(t => (
                         <button key={t} className={`td-tab ${activeTab === t ? 'td-tab-active' : ''}`} onClick={() => setActiveTab(t)}>
                             {t === 'overview' ? '📊 Class Overview' : t === 'alerts' ? '🔔 Alerts' : '📚 Modules'}
@@ -70,7 +70,7 @@ export default function TeacherDashboard() {
 
                 {/* Overview */}
                 {activeTab === 'overview' && (
-                    <div className="card td-table-card">
+                    <div className="card td-table-card animate-fade-up-3">
                         <div className="td-table-header">
                             <h3 className="card-title" style={{ margin: 0 }}>Student Progress</h3>
                             <span className="text-muted" style={{ fontSize: 13 }}>Updated in real-time</span>
@@ -123,7 +123,7 @@ export default function TeacherDashboard() {
 
                 {/* Alerts */}
                 {activeTab === 'alerts' && (
-                    <div className="td-alerts">
+                    <div className="td-alerts animate-fade-up-3">
                         {ALERTS.map(a => (
                             <div key={a.id} className={`card td-alert-card sev-${a.severity}`}>
                                 <div className="alert-icon">{a.icon}</div>
@@ -145,7 +145,7 @@ export default function TeacherDashboard() {
 
                 {/* Modules */}
                 {activeTab === 'modules' && (
-                    <div className="td-modules">
+                    <div className="td-modules animate-fade-up-3">
                         {MODULES.map((m, i) => (
                             <div key={m.id} className="card td-module-card">
                                 <div className="module-icon">{m.icon}</div>

@@ -1,7 +1,7 @@
 import { useState, useRef, useEffect } from 'react';
 import Navbar from '../components/Navbar';
 import { useAuth } from '../context/AuthContext';
-import './StudentDashboard.css';
+import '../styles/StudentDashboard.css';
 
 const AI_RESPONSES = {
     default: [
@@ -137,7 +137,7 @@ export default function StudentDashboard() {
             <div className="sd-body">
 
                 {/* Sidebar */}
-                <aside className="sd-sidebar">
+                <aside className="sd-sidebar animate-fade-up-1">
                     {/* Profile */}
                     <div className="card sd-profile">
                         <div className="sd-avatar">{user?.avatar || '🦁'}</div>
@@ -148,133 +148,133 @@ export default function StudentDashboard() {
                             <span className="text-yellow" style={{ fontSize: 12, fontWeight: 700 }}>{user?.xp || 340} XP</span>
                         </div>
                         <div className="xp-bar-wrap" style={{ margin: '6px 0 0' }}><div className="xp-bar-fill" style={{ width: `${xpPct}%` }} /></div>
-                        <span className="text-muted" style={{ fontSize: 11 }}}>{200 - (user?.xp % 200)} XP to Level {(user?.level || 5) + 1}</span>
-            </div>
-
-            {/* Quick Tips */}
-            <div className="card sd-tips">
-                <h3 className="card-title">🌟 Safety Tips</h3>
-                {[
-                    ['🔐', 'Keep passwords private'],
-                    ['🚫', 'Block & report bullies'],
-                    ['📢', 'Tell a trusted adult'],
-                    ['🤔', 'Think before you post'],
-                    ['📵', 'Take screen breaks'],
-                ].map(([e, t]) => (
-                    <div key={t} className="tip-row"><span>{e}</span><span>{t}</span></div>
-                ))}
-            </div>
-
-            {/* Badges */}
-            <div className="card sd-badges">
-                <h3 className="card-title">🏅 My Badges</h3>
-                <div className="badges-grid">
-                    {BADGES.map(b => (
-                        <div key={b.id} className={`badge-item ${b.earned ? 'earned' : 'locked'}`} title={b.desc}>
-                            <span className="badge-emoji">{b.earned ? b.emoji : '🔒'}</span>
-                            <span className="badge-name">{b.name}</span>
-                        </div>
-                    ))}
-                </div>
-            </div>
-        </aside>
-
-        {/* Main */ }
-    <main className="sd-main">
-        {/* Chat */}
-        <div className="card sd-chat-card">
-            <div className="chat-header">
-                <div className="chat-bot-avatar">🤖</div>
-                <div>
-                    <h3 className="chat-bot-name">Guardo Bot</h3>
-                    <span className="badge badge-green" style={{ fontSize: 11 }}>● Online</span>
-                </div>
-            </div>
-            <div className="chat-messages">
-                {messages.map(m => (
-                    <div key={m.id} className={`chat-msg ${m.from === 'ai' ? 'msg-ai' : 'msg-user'}`}>
-                        {m.from === 'ai' && <span className="msg-avatar">🤖</span>}
-                        <div className="msg-bubble">{m.text}</div>
-                        {m.from === 'user' && <span className="msg-avatar">{user?.avatar || '🦁'}</span>}
+                        <span className="text-muted" style={{ fontSize: 11 }}>{200 - (user?.xp % 200)} XP to Level {(user?.level || 5) + 1}</span>
                     </div>
-                ))}
-                {typing && (
-                    <div className="chat-msg msg-ai">
-                        <span className="msg-avatar">🤖</span>
-                        <div className="msg-bubble typing-indicator">
-                            <span /><span /><span />
-                        </div>
-                    </div>
-                )}
-                <div ref={messagesEnd} />
-            </div>
-            <form className="chat-input-row" onSubmit={sendMessage}>
-                <input
-                    className="input chat-input"
-                    placeholder="Ask Guardo Bot anything about online safety…"
-                    value={input}
-                    onChange={e => setInput(e.target.value)}
-                />
-                <button type="submit" className="btn btn-primary chat-send" disabled={!input.trim()}>
-                    Send ➤
-                </button>
-            </form>
-        </div>
 
-        {/* Scenario Quiz */}
-        <div className="card sd-quiz-card">
-            <div className="quiz-header-row">
-                <h3 className="card-title">🎭 Safety Scenario Quiz</h3>
-                <span className="badge badge-gold">
-                    {score}/{SCENARIOS.length} correct
-                </span>
-            </div>
-
-            {quizDone ? (
-                <div className="quiz-done">
-                    <div className="quiz-done-emoji">{score === SCENARIOS.length ? '🏆' : score >= 2 ? '🌟' : '💪'}</div>
-                    <h3>{score === SCENARIOS.length ? 'Perfect Score!' : score >= 2 ? 'Great Job!' : 'Keep Practising!'}</h3>
-                    <p>You got <strong>{score}</strong> out of <strong>{SCENARIOS.length}</strong> correct!</p>
-                    {score === SCENARIOS.length && <p className="quiz-bonus">+50 XP Bonus earned! 🎉</p>}
-                    <button className="btn btn-primary" onClick={resetQuiz} style={{ marginTop: 16 }}>
-                        🔁 Try Again
-                    </button>
-                </div>
-            ) : (
-                <>
-                    <div className="quiz-progress">
-                        <div className="quiz-prog-fill" style={{ width: `${((scenario) / SCENARIOS.length) * 100}%` }} />
+                    {/* Quick Tips */}
+                    <div className="card sd-tips">
+                        <h3 className="card-title">🌟 Safety Tips</h3>
+                        {[
+                            ['🔐', 'Keep passwords private'],
+                            ['🚫', 'Block & report bullies'],
+                            ['📢', 'Tell a trusted adult'],
+                            ['🤔', 'Think before you post'],
+                            ['📵', 'Take screen breaks'],
+                        ].map(([e, t]) => (
+                            <div key={t} className="tip-row"><span>{e}</span><span>{t}</span></div>
+                        ))}
                     </div>
-                    <div className="scenario-card">
-                        <div className="scenario-emoji">{cur.emoji}</div>
-                        <div className="badge badge-orange" style={{ marginBottom: 12 }}>{cur.title}</div>
-                        <p className="scenario-question">{cur.question}</p>
-                        <div className="scenario-options">
-                            {cur.options.map((opt, idx) => (
-                                <button
-                                    key={idx}
-                                    className={`scenario-opt ${answered !== null
-                                            ? opt.correct ? 'opt-correct' : answered === idx ? 'opt-wrong' : 'opt-dim'
-                                            : ''
-                                        }`}
-                                    onClick={() => handleAnswer(opt, idx)}
-                                    disabled={answered !== null}
-                                >
-                                    {opt.text}
-                                </button>
+
+                    {/* Badges */}
+                    <div className="card sd-badges">
+                        <h3 className="card-title">🏅 My Badges</h3>
+                        <div className="badges-grid">
+                            {BADGES.map(b => (
+                                <div key={b.id} className={`badge-item ${b.earned ? 'earned' : 'locked'}`} title={b.desc}>
+                                    <span className="badge-emoji">{b.earned ? b.emoji : '🔒'}</span>
+                                    <span className="badge-name">{b.name}</span>
+                                </div>
                             ))}
                         </div>
-                        {answered !== null && (
-                            <div className={`opt-feedback ${cur.options[answered].correct ? 'fb-correct' : 'fb-wrong'}`}>
-                                {cur.options[answered].feedback}
+                    </div>
+                </aside>
+
+                {/* Main */}
+                <main className="sd-main">
+                    {/* Chat */}
+                    <div className="card sd-chat-card animate-fade-up-2">
+                        <div className="chat-header">
+                            <div className="chat-bot-avatar">🤖</div>
+                            <div>
+                                <h3 className="chat-bot-name">Guardo Bot</h3>
+                                <span className="badge badge-green" style={{ fontSize: 11 }}>● Online</span>
                             </div>
+                        </div>
+                        <div className="chat-messages">
+                            {messages.map(m => (
+                                <div key={m.id} className={`chat-msg ${m.from === 'ai' ? 'msg-ai' : 'msg-user'}`}>
+                                    {m.from === 'ai' && <span className="msg-avatar">🤖</span>}
+                                    <div className="msg-bubble">{m.text}</div>
+                                    {m.from === 'user' && <span className="msg-avatar">{user?.avatar || '🦁'}</span>}
+                                </div>
+                            ))}
+                            {typing && (
+                                <div className="chat-msg msg-ai">
+                                    <span className="msg-avatar">🤖</span>
+                                    <div className="msg-bubble typing-indicator">
+                                        <span /><span /><span />
+                                    </div>
+                                </div>
+                            )}
+                            <div ref={messagesEnd} />
+                        </div>
+                        <form className="chat-input-row" onSubmit={sendMessage}>
+                            <input
+                                className="input chat-input"
+                                placeholder="Ask Guardo Bot anything about online safety…"
+                                value={input}
+                                onChange={e => setInput(e.target.value)}
+                            />
+                            <button type="submit" className="btn btn-primary chat-send" disabled={!input.trim()}>
+                                Send ➤
+                            </button>
+                        </form>
+                    </div>
+
+                    {/* Scenario Quiz */}
+                    <div className="card sd-quiz-card animate-fade-up-3">
+                        <div className="quiz-header-row">
+                            <h3 className="card-title">🎭 Safety Scenario Quiz</h3>
+                            <span className="badge badge-gold">
+                                {score}/{SCENARIOS.length} correct
+                            </span>
+                        </div>
+
+                        {quizDone ? (
+                            <div className="quiz-done">
+                                <div className="quiz-done-emoji">{score === SCENARIOS.length ? '🏆' : score >= 2 ? '🌟' : '💪'}</div>
+                                <h3>{score === SCENARIOS.length ? 'Perfect Score!' : score >= 2 ? 'Great Job!' : 'Keep Practising!'}</h3>
+                                <p>You got <strong>{score}</strong> out of <strong>{SCENARIOS.length}</strong> correct!</p>
+                                {score === SCENARIOS.length && <p className="quiz-bonus">+50 XP Bonus earned! 🎉</p>}
+                                <button className="btn btn-primary" onClick={resetQuiz} style={{ marginTop: 16 }}>
+                                    🔁 Try Again
+                                </button>
+                            </div>
+                        ) : (
+                            <>
+                                <div className="quiz-progress">
+                                    <div className="quiz-prog-fill" style={{ width: `${((scenario) / SCENARIOS.length) * 100}%` }} />
+                                </div>
+                                <div className="scenario-card">
+                                    <div className="scenario-emoji">{cur.emoji}</div>
+                                    <div className="badge badge-orange" style={{ marginBottom: 12 }}>{cur.title}</div>
+                                    <p className="scenario-question">{cur.question}</p>
+                                    <div className="scenario-options">
+                                        {cur.options.map((opt, idx) => (
+                                            <button
+                                                key={idx}
+                                                className={`scenario-opt ${answered !== null
+                                                    ? opt.correct ? 'opt-correct' : answered === idx ? 'opt-wrong' : 'opt-dim'
+                                                    : ''
+                                                    }`}
+                                                onClick={() => handleAnswer(opt, idx)}
+                                                disabled={answered !== null}
+                                            >
+                                                {opt.text}
+                                            </button>
+                                        ))}
+                                    </div>
+                                    {answered !== null && (
+                                        <div className={`opt-feedback ${cur.options[answered].correct ? 'fb-correct' : 'fb-wrong'}`}>
+                                            {cur.options[answered].feedback}
+                                        </div>
+                                    )}
+                                </div>
+                            </>
                         )}
                     </div>
-                </>
-            )}
-        </div>
-    </main>
-      </div >
-    </div >
-  );
+                </main>
+            </div >
+        </div >
+    );
 }
