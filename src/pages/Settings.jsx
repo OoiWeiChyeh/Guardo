@@ -65,9 +65,6 @@ export default function Settings() {
                 desc={r.desc}
                 checked={!!prefs[r.key]}
                 onChange={() => {
-                  // #region agent log
-                  fetch('http://127.0.0.1:7497/ingest/441325da-a54d-4149-8145-ea1d5aa2766b', { method: 'POST', headers: { 'Content-Type': 'application/json', 'X-Debug-Session-Id': '2857d3' }, body: JSON.stringify({ sessionId: '2857d3', runId: 'baseline', hypothesisId: 'H_SETTINGS', location: 'src/pages/Settings.jsx:55', message: 'toggle preference', data: { key: r.key, next: !prefs[r.key] }, timestamp: Date.now() }) }).catch(() => { });
-                  // #endregion
                   toggle(r.key);
                 }}
               />

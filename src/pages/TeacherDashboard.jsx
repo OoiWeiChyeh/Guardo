@@ -1,5 +1,6 @@
-import { useState } from 'react';
+import { useMemo, useState } from 'react';
 import Navbar from '../components/Navbar';
+import { useAuth } from '../context/AuthContext';
 import './TeacherDashboard.css';
 
 const STUDENTS = [
@@ -27,6 +28,7 @@ const MODULES = [
 export default function TeacherDashboard() {
     const [assigned, setAssigned] = useState(MODULES.map(m => m.assigned));
     const [activeTab, setActiveTab] = useState('overview');
+    const { allUsers, approveUser, rejectUser, user } = useAuth();
 
     const avgScore = Math.round(STUDENTS.reduce((a, s) => a + s.quizScore, 0) / STUDENTS.length);
     const avgXP = Math.round(STUDENTS.reduce((a, s) => a + s.xp, 0) / STUDENTS.length);
@@ -39,6 +41,13 @@ export default function TeacherDashboard() {
         return <span className="badge badge-gold">On Track</span>;
     };
 
+    const pendingStudents = useMemo(
+        () => Object.entries(allUsers || {})
+            .filter(([, u]) => u.role === 'student' && u.status === 'pending')
+            .map(([email, u]) => ({ email, ...u })),
+        [allUsers],
+    );
+
     return (
         <div className="td-root">
             <Navbar />
@@ -48,7 +57,7 @@ export default function TeacherDashboard() {
                 <div className="td-banner">
                     <div>
                         <h1 className="td-heading">Class 4B Overview</h1>
-                        <p className="td-sub">Monitor student safety awareness progress and AI interaction data</p>
+                        <p className="td-sub">Monitor student safety awareness progress, approvals and AI interaction data</p>
                     </div>
                     <div className="td-stats-row">
                         <div className="td-stat"><span className="td-stat-val">{STUDENTS.length}</span><span className="td-stat-lbl">Students</span></div>
@@ -60,13 +69,75 @@ export default function TeacherDashboard() {
 
                 {/* Tabs */}
                 <div className="td-tabs">
-                    {['overview', 'alerts', 'modules'].map(t => (
+                    {['overview', 'approvals', 'alerts', 'modules'].map(t => (
                         <button key={t} className={`td-tab ${activeTab === t ? 'td-tab-active' : ''}`} onClick={() => setActiveTab(t)}>
-                            {t === 'overview' ? '📊 Class Overview' : t === 'alerts' ? '🔔 Alerts' : '📚 Modules'}
+                            {t === 'overview'
+                                ? '📊 Class Overview'
+                                : t === 'approvals'
+                                    ? '✅ Approvals'
+                                    : t === 'alerts'
+                                        ? '🔔 Alerts'
+                                        : '📚 Modules'}
                             {t === 'alerts' && <span className="tab-dot">{ALERTS.filter(a => a.severity === 'high').length}</span>}
                         </button>
                     ))}
                 </div>
+
+                {/* Approvals */}
+                {activeTab === 'approvals' && (
+                    <div className="card td-approvals-card">
+                        <div className="td-table-header">
+                            <h3 className="card-title" style={{ margin: 0 }}>Pending student registrations</h3>
+                            <span className="text-muted" style={{ fontSize: 13 }}>
+                                {pendingStudents.length === 0
+                                    ? 'No students waiting for approval.'
+                                    : `${pendingStudents.length} student(s) awaiting your review`}
+                            </span>
+                        </div>
+                        {pendingStudents.length === 0 ? (
+                            <p className="td-approvals-empty">
+                                🎉 All caught up! New student sign‑ups will appear here for your approval.
+                            </p>
+                        ) : (
+                            <div className="td-approvals-list">
+                                {pendingStudents.map((s) => (
+                                    <div key={s.email} className="td-approvals-row">
+                                        <div className="td-approvals-main">
+                                            <span className="td-stu-avatar">{s.avatar || '🧒'}</span>
+                                            <div>
+                                                <div className="td-stu-name">{s.name || s.email}</div>
+                                                <div className="td-stu-grade">
+                                                    {s.grade || 'Student'} · <span className="text-muted">{s.email}</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div className="td-approvals-actions">
+                                            <button
+                                                type="button"
+                                                className="btn btn-ghost td-approve-btn"
+                                                onClick={() => approveUser(s.email.toLowerCase())}
+                                            >
+                                                ✓ Approve
+                                            </button>
+                                            <button
+                                                type="button"
+                                                className="btn btn-ghost td-reject-btn"
+                                                onClick={() => rejectUser(s.email.toLowerCase())}
+                                            >
+                                                ✕ Reject
+                                            </button>
+                                        </div>
+                                    </div>
+                                ))}
+                            </div>
+                        )}
+                        {user?.role === 'teacher' && (
+                            <p className="td-approvals-hint">
+                                As a class teacher, you can approve <strong>student</strong> accounts. Teachers are approved by the school admin.
+                            </p>
+                        )}
+                    </div>
+                )}
 
                 {/* Overview */}
                 {activeTab === 'overview' && (

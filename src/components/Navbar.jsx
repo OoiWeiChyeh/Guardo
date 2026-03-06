@@ -1,4 +1,4 @@
-import { useNavigate } from 'react-router-dom';
+import { NavLink, useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import './Navbar.css';
 
@@ -11,9 +11,21 @@ export default function Navbar() {
         navigate('/');
     };
 
+    const dashPath =
+        user?.role === 'teacher' ? '/teacher' :
+            user?.role === 'admin' ? '/admin' :
+                '/student';
+
     return (
         <nav className="navbar">
-            <div className="navbar-logo" onClick={() => navigate(user?.role === 'teacher' ? '/teacher' : '/student')}>
+            <div
+                className="navbar-logo"
+                role="button"
+                tabIndex={0}
+                onClick={() => navigate(user ? dashPath : '/')}
+                onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') navigate(user ? dashPath : '/'); }}
+                aria-label="Go to dashboard"
+            >
                 <div className="nav-shield">
                     <svg viewBox="0 0 40 46" fill="none" xmlns="http://www.w3.org/2000/svg" width="32" height="32">
                         <path d="M20 2L36 9V22C36 31.5 29 39.5 20 43C11 39.5 4 31.5 4 22V9L20 2Z"
@@ -40,20 +52,47 @@ export default function Navbar() {
             </div>
 
             <div className="navbar-center">
-                <span className="nav-tagline">Guardian AI</span>
+                <div className="nav-links" aria-label="Primary">
+                    {user && (
+                        <NavLink to={dashPath} className={({ isActive }) => `nav-link ${isActive ? 'nav-link-active' : ''}`}>
+                            🏠 Dashboard
+                        </NavLink>
+                    )}
+                    <NavLink to="/settings" className={({ isActive }) => `nav-link ${isActive ? 'nav-link-active' : ''}`}>
+                        ⚙️ Settings
+                    </NavLink>
+                    <NavLink to="/about" className={({ isActive }) => `nav-link ${isActive ? 'nav-link-active' : ''}`}>
+                        ℹ️ About
+                    </NavLink>
+                </div>
             </div>
 
             <div className="navbar-right">
-                <div className="nav-user">
-                    <span className="nav-avatar">{user?.avatar}</span>
-                    <div className="nav-user-info">
-                        <span className="nav-name">{user?.name}</span>
-                        <span className="nav-role">{user?.role === 'teacher' ? '👩‍🏫 Teacher' : '🎓 Student'}</span>
-                    </div>
-                </div>
-                <button className="btn btn-ghost nav-logout" onClick={handleLogout}>
-                    ⏻ Logout
-                </button>
+                {user ? (
+                    <>
+                        <div className="nav-user">
+                            <span className="nav-avatar" aria-hidden="true">{user?.avatar}</span>
+                            <div className="nav-user-info">
+                                <span className="nav-name">{user?.name}</span>
+                                <span className="nav-role">
+                                    {user?.role === 'teacher' ? '👩‍🏫 Teacher' : user?.role === 'admin' ? '👑 Admin' : '🎓 Student'}
+                                </span>
+                            </div>
+                        </div>
+                        <button className="btn btn-ghost nav-logout" onClick={handleLogout}>
+                            ⏻ Logout
+                        </button>
+                    </>
+                ) : (
+                    <>
+                        <button className="btn btn-ghost nav-logout" onClick={() => navigate('/signup')}>
+                            Sign up
+                        </button>
+                        <button className="btn btn-primary nav-logout" onClick={() => navigate('/')}>
+                            Sign in
+                        </button>
+                    </>
+                )}
             </div>
         </nav>
     );
